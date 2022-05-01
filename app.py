@@ -18,8 +18,8 @@ def search_query_olx():
     # query_data = {"query":"BMW", "results_count":200, "email":"a.khaled.abdrabou@gmail.com"}
 
     query_data = json.loads(request.data)
-    results_count = query_data.get("results_count")
-    query = query_data.get("query")
+    results_count = query_data.get("results_count") if query_data.get("results_count") > 20 else 20
+    query = query_data.get("query") 
     email_to = query_data.get("email")
 
     coll_list = olx_db.list_collection_names()
@@ -51,7 +51,7 @@ def search_query_olx():
                 dictlist_to_csv("items",items_dictionaries,FIELDS)
                 send_mail(email_to)
                 return jsonify({
-                            'msg':"Data retrieved from your database,scraped from Olx and emailed to you successfully."
+                            'msg':"Some data retrieved from your database, some scraped from Olx and both emailed to you successfully."
                         }) , 200
             except Exception as e:
                 return jsonify({
